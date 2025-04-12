@@ -1,0 +1,12 @@
+{
+  "include": ["htx_transcriber", "alembic"],
+  "exclude": ["**/node_modules", "**/__pycache__"],
+  "venvPath": "/Users/ethanle/.pyenv/versions/3.11.10/envs",
+  "venv": "htx_transcriber",
+  "reportMissingImports": "warning",
+  "reportMissingTypeStubs": "none",
+  "pythonVersion": "3.11",
+  "typeCheckingMode": "basic",
+  "useLibraryCodeForTypes": true,
+  "extraPaths": ["${workspaceFolder}"]
+} 
