@@ -42,6 +42,7 @@ def process_audio_file(audio_file: UploadFile, db: Session) -> Dict[str, Any]:
                 "message": "Filename is missing"
             }
         # Check if file already exists
+        print(f"Checking if file already exists: {audio_file.filename}")
         first_version = add_file_version(audio_file.filename)
         if db.query(TranscriptionModel).filter(
             TranscriptionModel.audio_file_name == first_version
