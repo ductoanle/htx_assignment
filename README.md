@@ -33,7 +33,7 @@ A web application that allows users to upload and transcribe audio files using O
 # Issues to Fix
 
 - Should search only on the original file names which do contain versions.
-- More user friendly error messages.
+- Make error messages more user friendly.
 
 # Backend
 
@@ -72,7 +72,7 @@ Note: Tested in Mac only as I have no Windows machine.
 
 1. Clone the repository:
 ```bash
-git clone <repository-url>
+git clone git@github.com:ductoanle/htx_assignment.git
 cd htx_assignment
 ```
 
@@ -149,11 +149,11 @@ The application will be available at `http://localhost:8000`
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
-## Available Scripts
-
 In the project directory, you can run:
 
-### `npm start`
+```bash
+npm start
+```
 
 Runs the app in the development mode.\
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
@@ -178,3 +178,5 @@ docker build -t htx-transcriber-frontend .
 ```bash
 docker run -p 3000:3000 htx-transcriber-frontend
 ```
+
+The application will be available at `http://localhost:3000`
