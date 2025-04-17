@@ -1,12 +1,13 @@
 from datetime import datetime
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import List, Dict, Any, Optional
 from fastapi import UploadFile, HTTPException
 from sqlalchemy.orm import Session
 from htx_transcriber.services.transcribe_processor import transcribe_audio
 from htx_transcriber.utils import add_file_version, split_file_name
 from htx_transcriber.settings import UPLOAD_DIR
 from htx_transcriber.models.transcription import TranscriptionModel
+from sqlalchemy.sql import select
 
 # Allowed audio file types
 ALLOWED_AUDIO_TYPES = [
@@ -41,12 +42,10 @@ def process_audio_file(audio_file: UploadFile, db: Session) -> Dict[str, Any]:
                 "message": "Filename is missing"
             }
         # Check if file already exists
-        print(f"Checking if file already exists: {audio_file.filename}")
         first_version = add_file_version(audio_file.filename)
         if db.query(TranscriptionModel).filter(
             TranscriptionModel.audio_file_name == first_version
         ).first():
-            print(f"File already exists: {first_version}")
             # Search for latest file with similar name
             query = db.query(
                 TranscriptionModel.audio_file_name
@@ -55,15 +54,7 @@ def process_audio_file(audio_file: UploadFile, db: Session) -> Dict[str, Any]:
                     f"{split_file_name(audio_file.filename)[0]}%"
                 )
             ).order_by(TranscriptionModel.created_at.desc())
-            # Print the SQL query for debugging
-            compile_kwargs = {'literal_binds': True}
-            compiled_query = query.statement.compile(
-                compile_kwargs=compile_kwargs
-            )
-            print(f"SQL Query: {compiled_query}")
             last_similar_file = query.first()
-            # print the sql query
-            print(f"Last similar file: {last_similar_file}")
             # Update audio file name
             if last_similar_file:
                 audio_file.filename = add_file_version(
@@ -120,3 +111,63 @@ def search_transcriptions(query: str, db: Session) -> List[Dict[str, Any]]:
         TranscriptionModel.created_at.desc()
     ).all()
     return [transcription.as_JSON() for transcription in transcriptions]
+
+
+def get_next_version(audio_file: UploadFile, db: Session) -> str:
+    """Get the next version number for a file."""
+    # Check if file already exists
+    base_name = (
+        audio_file.filename.split("_ver_")[0]
+        if "_ver_" in audio_file.filename
+        else audio_file.filename
+    )
+    base_name = base_name.rsplit(".", 1)[0]  # Remove extension
+
+    # Query for existing versions
+    query = select(TranscriptionModel).where(
+        TranscriptionModel.audio_file_name.like(f"{base_name}_ver_%")
+    ).order_by(TranscriptionModel.audio_file_name.desc())
+
+    # Get the first result (most recent version)
+    first_version = db.execute(query).first()
+
+    if first_version:
+        # Extract version number and increment
+        version_str = (
+            first_version[0].audio_file_name
+            .split("_ver_")[1].split(".")[0]
+        )
+        next_version = int(version_str) + 1
+    else:
+        # No existing version, start with 1
+        next_version = 1
+
+    # Construct new filename
+    file_ext = audio_file.filename.split(".")[-1]
+    return f"{base_name}_ver_{next_version}.{file_ext}"
+
+
+def find_similar_file(
+    audio_file: UploadFile,
+    db: Session
+) -> Optional[TranscriptionModel]:
+    """Find a similar file in the database."""
+    # Extract base name without version
+    base_name = (
+        audio_file.filename.split("_ver_")[0]
+        if "_ver_" in audio_file.filename
+        else audio_file.filename
+    )
+    base_name = base_name.rsplit(".", 1)[0]  # Remove extension
+
+    # Query for similar files
+    query = select(TranscriptionModel).where(
+        TranscriptionModel.audio_file_name.like(f"{base_name}%")
+    ).order_by(TranscriptionModel.audio_file_name.desc())
+
+    # Get the first result
+    last_similar_file = db.execute(query).first()
+
+    if last_similar_file:
+        return last_similar_file[0]
+    return None

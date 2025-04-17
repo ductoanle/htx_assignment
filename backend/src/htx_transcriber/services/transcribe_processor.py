@@ -14,7 +14,6 @@ class WhisperProcessor:
             raise TranscriptionError(f"Failed to load Whisper model: {str(e)}")
 
     def transcribe_audio(self, audio_path: str | Path) -> str:
-        print(f"Transcribing audio from {audio_path}")
         try:
             # Load and pre-process the audio
             audio = whisper.load_audio(str(audio_path))
