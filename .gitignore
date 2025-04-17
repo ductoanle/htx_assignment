@@ -6,5 +6,5 @@ __pycache__
 *$py.class
 
 .env
-htx_transcriber.database
+htx_transcriber.db
 uploaded_audio_files
