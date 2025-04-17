@@ -20,7 +20,6 @@ ALLOWED_AUDIO_TYPES = [
 ]
 
 STATUS_SUCCESS = "success"
-STATUS_SKIPPED = "skipped"
 STATUS_ERROR = "error"
 
 
