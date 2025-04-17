@@ -1,4 +1,17 @@
+# HTX Transcriber
+
 A web application that allows users to upload and transcribe audio files using OpenAI's Whisper model.
+
+## Demo Video
+
+<div align="center">
+  <h3>Application Demo</h3>
+  <p>
+    <a href="demo_video.mp4">
+      <img src="https://raw.githubusercontent.com/gist/ethanle/1234567890abcdef/raw/thumbnail.png" alt="Demo Video Thumbnail" width="600"/>
+    </a>
+  </p>
+</div>
 
 # Potential Improvements
 
