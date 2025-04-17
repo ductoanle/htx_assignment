@@ -73,7 +73,6 @@ Note: Tested in Mac only as I have no Windows machine.
 1. Clone the repository:
 ```bash
 git clone git@github.com:ductoanle/htx_assignment.git
-cd htx_assignment
 ```
 
 2. Install Poetry (if not already installed):
@@ -82,9 +81,6 @@ curl -sSL https://install.python-poetry.org | python3 -
 ```
 
 3. Navigate to the backend directory:
-```bash
-cd backend
-```
 
 4. Install dependencies using Poetry:
 ```bash
@@ -103,10 +99,7 @@ poetry run alembic upgrade head
 
 ## Running Tests
 
-1. Make sure you're in the backend directory:
-```bash
-cd backend
-```
+1. Make sure you're in the backend directory
 
 2. Run all tests:
 ```bash
@@ -126,10 +119,7 @@ The application will be available at `http://localhost:8000`
 
 ### Building the Docker Image
 
-1. Make sure you're in the backend directory:
-```bash
-cd backend
-```
+1. Make sure you're in the backend directory
 
 2. Build the Docker image:
 ```bash
@@ -162,10 +152,7 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
 ### Building the Docker Image
 
-1. Make sure you're in the frontend directory:
-```bash
-cd frontend
-```
+1. Make sure you're in the frontend directory
 
 2. Build the Docker image:
 ```bash
