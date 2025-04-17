@@ -62,10 +62,10 @@ interface ParsedFilename {
 }
 
 function parseFilename(filename: string): ParsedFilename {
-  const versionMatch = filename.match(/_ver_(\d+)$/);
+  const versionMatch = filename.match(/_ver_(\d+)\./);
   if (versionMatch) {
     const version = parseInt(versionMatch[1], 10);
-    const baseName = filename.replace(/_ver_\d+$/, '');
+    const baseName = filename.replace(/_ver_\d+\./, '.');
     return { baseName, version };
   }
   return { baseName: filename, version: null };
@@ -94,7 +94,7 @@ function TranscriptionTable({ transcriptions }: { transcriptions: Transcription[
               return (
                 <TableRow key={transcription.id}>
                   <TableCell>{baseName}</TableCell>
-                  <TableCell>{version || '-'}</TableCell>
+                  <TableCell>{version !== null ? version : '-'}</TableCell>
                   <TableCell>{transcription.transcribed_text}</TableCell>
                   <TableCell>{formatDate(transcription.created_at)}</TableCell>
                 </TableRow>
