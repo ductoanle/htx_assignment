@@ -1,2 +1,2 @@
-DATABASE_URL="htx_transciber.db"
+DATABASE_URL="htx_transcriber.db"
 UPLOAD_DIR="uploaded_audio_files"
